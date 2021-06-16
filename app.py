@@ -37,6 +37,8 @@ def pre_data_pass():
     dfPasseChel = pd.read_csv('./assets/data/TypesDePasseChelsea.csv') #3
     dfPasseMan = pd.read_csv('./assets/data/TypesDePasseManCity.csv') #3
 
+
+
 def pre_data_tire():
     dfTirs = pd.read_csv('./assets/data/Tirs.csv')  #4
 
@@ -44,7 +46,9 @@ def pre_data_gard():
     dfGardienChel = pd.read_csv('./assets/data/StatsGardienChelsea.csv') #5
     dfGardienMan = pd.read_csv('./assets/data/StatsGardienManCity.csv') #5
 
-
+    proc_data_man = preprocess.clean_pressure(dfDefManCity)
+    proc_data_chel = preprocess.clean_pressure(dfDefChel)
+    return proc_data_chel, proc_data_man
 
 def prep_data_press():
     '''
