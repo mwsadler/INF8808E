@@ -66,6 +66,11 @@ button:hover, button:active {
     padding: 0 100px;
 }
 
+.viz-comparison{
+    display: flex;
+    flex-direction: row;
+}
+
 .xy {
     cursor: default;
 }

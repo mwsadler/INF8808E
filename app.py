@@ -29,23 +29,39 @@ app = dash.Dash(__name__)
 app.title = 'TP2 | INF8808'
 
 
-def prep_data():
+def prep_data_poss():
+    dfPossChel= pd.read_csv('./assets/data/PossessionChelsea.csv') #2 
+    dfPossMan = pd.read_csv('./assets/data/PossessionManCity.csv') #2 
+
+def pre_data_pass():
+    dfPasseChel = pd.read_csv('./assets/data/TypesDePasseChelsea.csv') #3
+    dfPasseMan = pd.read_csv('./assets/data/TypesDePasseManCity.csv') #3
+
+def pre_data_tire():
+    dfTirs = pd.read_csv('./assets/data/Tirs.csv')  #4
+
+def pre_data_gard():
+    dfGardienChel = pd.read_csv('./assets/data/StatsGardienChelsea.csv') #5
+    dfGardienMan = pd.read_csv('./assets/data/StatsGardienManCity.csv') #5
+
+
+
+def prep_data_press():
     '''
         Imports the .csv file and does some preprocessing.
 
         Returns:
             A pandas dataframe containing the preprocessed data.
     '''
-    dataframe = pd.read_csv('./assets/data/romeo_and_juliet.csv')
+    dfDefManCity = pd.read_csv('./assets/data/ActionDefensiveManCity.csv') #1 
+    dfDefChel = pd.read_csv('./assets/data/ActionDefensiveChelsea.csv') #1 
+    
+    proc_data_man = preprocess.clean_pressure(dfDefManCity)
+    proc_data_chel = preprocess.clean_pressure(dfDefChel)
+    return proc_data_chel, proc_data_man
 
-    proc_data = preprocess.summarize_lines(dataframe)
-    proc_data = preprocess.replace_others(proc_data)
-    proc_data = preprocess.clean_names(proc_data)
 
-    return proc_data
-
-
-def init_app_layout(figure):
+def init_app_layout(figPressureChel, figPressureMan, figure):
     '''
         Generates the HTML layout representing the app.
 
@@ -56,10 +72,49 @@ def init_app_layout(figure):
     '''
     return html.Div(className='content', children=[
         html.Header(children=[
-            html.H1('Who\'s Speaking?'),
-            html.H2('An analysis of Shakespeare\'s Romeo and Juliet')
+            html.H1('Finale ligue des champion 2020-2021: Manchester city vs chelsea'),
+            html.H2('Analyse des performances des 2 équipes')
         ]),
         html.Main(children=[
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 1: Pressions'),
+                html.Div('Blablablablabalbla')
+            ]),
+            html.Div(className='viz-comparison', children=[
+                html.Div(className='viz-container', children=[
+                    dcc.Graph(
+                        figure=figPressureChel,
+                        config=dict(
+                            scrollZoom=False,
+                            showTips=False,
+                            showAxisDragHandles=False,
+                            doubleClick=False,
+                            displayModeBar=False
+                        ),
+                        className='graph',
+                        id='v1-1'
+                    )
+                ]),
+                html.Div(className='viz-container', children=[
+                    dcc.Graph(
+                        figure=figPressureMan,
+                        config=dict(
+                            scrollZoom=False,
+                            showTips=False,
+                            showAxisDragHandles=False,
+                            doubleClick=False,
+                            displayModeBar=False
+                        ),
+                        className='graph',
+                        id='v1-2'
+                    )
+                ]),
+            ]),
+            
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 2: Touches par zone'),
+                html.Div('Blablablablabalbla')
+            ]),
             html.Div(className='viz-container', children=[
                 dcc.Graph(
                     figure=figure,
@@ -71,66 +126,90 @@ def init_app_layout(figure):
                         displayModeBar=False
                     ),
                     className='graph',
-                    id='line-chart'
+                    id='v2'
                 )
-            ])
-        ]),
-        html.Footer(children=[
-            html.Div(className='panel', children=[
-                html.Div(id='info', children=[
-                    html.P('Use the radio buttons to change the display.'),
-                    html.P(children=[
-                        html.Span('The current mode is : '),
-                        html.Span(MODES['count'], id='mode')
-                    ])
-                ]),
-                html.Div(children=[
-                    dcc.RadioItems(
-                        id='radio-items',
-                        options=[
-                            dict(
-                                label=MODES['count'],
-                                value=MODES['count']),
-                            dict(
-                                label=MODES['percent'],
-                                value=MODES['percent']),
-                        ],
-                        value=MODES['count']
+            ]),
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 3: Rendement des passes'),
+                html.Div('Blablablablabalbla')
+            ]),
+            html.Div(className='viz-comparison', children=[
+                html.Div(className='viz-container', children=[
+                    dcc.Graph(
+                        figure=figure,
+                        config=dict(
+                            scrollZoom=False,
+                            showTips=False,
+                            showAxisDragHandles=False,
+                            doubleClick=False,
+                            displayModeBar=False
+                        ),
+                        className='graph',
+                        id='v3-1'
                     )
-                ])
-            ])
-        ])
+                ]),
+                html.Div(className='viz-container', children=[
+                    dcc.Graph(
+                        figure=figure,
+                        config=dict(
+                            scrollZoom=False,
+                            showTips=False,
+                            showAxisDragHandles=False,
+                            doubleClick=False,
+                            displayModeBar=False
+                        ),
+                        className='graph',
+                        id='v3-2'
+                    )
+                ]),
+            ]),
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 4: Tirs au cours du match'),
+                html.Div('Blablablablabalbla')
+            ]),
+            html.Div(className='viz-container', children=[
+                dcc.Graph(
+                    figure=figure,
+                    config=dict(
+                        scrollZoom=False,
+                        showTips=False,
+                        showAxisDragHandles=False,
+                        doubleClick=False,
+                        displayModeBar=False
+                    ),
+                    className='graph',
+                    id='v4'
+                )
+            ]),
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 5: Rendement des passes des gardiens'),
+                html.Div('Blablablablabalbla')
+            ]),
+            html.Div(className='viz-container', children=[
+                dcc.Graph(
+                    figure=figure,
+                    config=dict(
+                        scrollZoom=False,
+                        showTips=False,
+                        showAxisDragHandles=False,
+                        doubleClick=False,
+                        displayModeBar=False
+                    ),
+                    className='graph',
+                    id='v5'
+                )
+            ]),
+        ]),
     ])
+    
 
-
-@app.callback(
-    [Output('line-chart', 'figure'), Output('mode', 'children')],
-    [Input('radio-items', 'value')],
-    [State('line-chart', 'figure')]
-)
-def radio_updated(mode, figure):
-    '''
-        Updates the application after the radio input is modified.
-
-        Args:
-            mode: The mode selected in the radio input.
-            figure: The figure as it is currently displayed
-        Returns:
-            new_fig: The figure to display after the change of radio input
-            mode: The new mode
-    '''
-    # TODO : Update the figure's data and y axis, as well as the informational
-    # text indicating the mode
-    new_fig = figure
-    new_fig = bar_chart.draw(new_fig, prep_data(), mode)
-    new_fig = bar_chart.update_y_axis(new_fig, mode)
-    return new_fig, ''
-
-
-data = prep_data()
+data_press_viz_chel, data_press_viz_man = prep_data_press()
 
 create_template()
 
 fig = bar_chart.init_figure()
 
-app.layout = init_app_layout(fig)
+figPressureChel = bar_chart.draw_pressure_viz(fig, data_press_viz_chel)
+figPressureMan = bar_chart.draw_pressure_viz(fig, data_press_viz_man)
+
+app.layout = init_app_layout(figPressureChel, figPressureMan, figPressureMan)

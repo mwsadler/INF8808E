@@ -114,3 +114,23 @@ def clean_names(my_df):
     dfClean['Player'] = my_df['Player'].str.title()
 
     return dfClean
+
+def clean_pressure(my_df):
+    '''
+        In the dataframe, formats the players'
+        names so each word start with a capital letter.
+
+        Returns:
+            The df with formatted names
+    '''
+    my_df.rename( columns={'Unnamed: 0':'Joueur', 'Pressions':'PressionsRate', 'Pressions.1':'PressionsReussis'}, inplace=True )
+    my_df = my_df[['Joueur', 'PressionsRate', 'PressionsReussis']]
+    my_df = my_df.drop([0, 15]).reset_index()
+    my_df = my_df.drop(['index'], axis=1)
+    my_df['PressionsRate'] = my_df['PressionsRate'].astype(int)
+    my_df.sort_values(['PressionsRate'], ascending=False, inplace=True)
+    my_df['PressionsReussis'] = my_df['PressionsReussis'].astype(int)
+    my_df['PressionsRate'] = my_df.apply(lambda x: x['PressionsRate'] - x['PressionsReussis'], axis=1)
+    my_df['Joueur'] = my_df.apply(lambda x: x['Joueur'][0: x['Joueur'].index('\\')], axis=1)
+    print(my_df)
+    return my_df

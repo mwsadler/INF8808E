@@ -4,6 +4,7 @@
 '''
 
 import plotly.graph_objects as go
+import plotly.express as px
 import plotly.io as pio
 
 import hover_template
@@ -34,7 +35,7 @@ def init_figure():
     return fig
 
 
-def draw(fig, data, mode):
+def draw_pressure_viz(fig, data):
     '''
         Ddrawraws the bar chart.
 
@@ -45,40 +46,21 @@ def draw(fig, data, mode):
         Returns:
             fig: The figure comprising the drawn bar chart
     '''
-    fig = go.Figure(fig)  # conversion back to Graph Object
-    fig.data = [] 
-
     # TODO : Update the figure's data according to the selected mode
 
-    names = ['Benvolio', 'Juliet', 'Mercutio', 'Nurse', 'Others', 'Romeo']
-    acts = ['Act 1','Act 2','Act 3','Act 4','Act 5']
+    traces = ['Total', 'Reussi']
+    names = data['Joueur'].unique()
     colors = [
         '#861388',
         '#d4a0a7',
-        '#dbd053',
-        '#1b998b',
-        '#A0CED9',
-        '#3e6680'
     ]
     
-    modeIndex = 3
-    lines = []
-    if(mode == 'Count'):
-        modeIndex = 2
+    fig = go.Figure(data=[
+        go.Bar(name='Reussi', x=data['Joueur'], y=data['PressionsReussis']),
+        go.Bar(name='Rate', x=data['Joueur'], y=data['PressionsRate']),
+    ])
 
-    
-    i = 0
-    for name in names:
-        templateItem = hover_template.get_hover_template(name, mode)
-        temp = data.loc[data['Player'].isin([name])].to_numpy()
-        tempLine = [0] * 5
-        for item in temp:
-            tempLine[item[1] - 1] = item[modeIndex]
-        lines.append(tempLine)
-        fig.add_trace(go.Bar(name=name, x=acts, y=lines[i], marker_color=colors[i], hovertemplate = templateItem))
-        i += 1
-
-    
+    fig.update_layout(barmode='stack')
     
     return fig
 
