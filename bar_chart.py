@@ -187,8 +187,8 @@ def goaler_viz(fig, dataChel, dataMan):
 
     shortPassChel = [dataChel['CourtReussis'][0], dataChel['CourtRate'][0]]
     longPassChel = [dataChel['LongReussis'][0], dataChel['LongRate'][0]]
-    shortPassMan = [dataChel['CourtReussis'][0], dataChel['CourtRate'][0]]
-    longPassMan = [dataChel['LongReussis'][0], dataChel['LongRate'][0]]
+    shortPassMan = [dataMan['CourtReussis'][0], dataMan['CourtRate'][0]]
+    longPassMan = [dataMan['LongReussis'][0], dataMan['LongRate'][0]]
     labels = ["Raté", "Réussi"]
 
     # Create subplots: use 'domain' type for Pie subplot
@@ -205,7 +205,7 @@ def goaler_viz(fig, dataChel, dataMan):
                 1, 4)
 
     # Use `hole` to create a donut-like pie chart
-    fig.update_traces(hole=.4, hoverinfo="label+percent+name")
+    fig.update_traces(hole=.8, hoverinfo="label+percent+name")
 
     fig.update_layout(
         title_text="Rendement des passes des gardiens",
