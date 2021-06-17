@@ -124,7 +124,7 @@ def passes_viz(fig, data):
     
     return fig
 
-def shot_viz(fig, data):
+def shot_viz(fig, dataMan, dataChe):
     '''
         Ddrawraws the bar chart.
 
@@ -152,28 +152,27 @@ def shot_viz(fig, data):
     #     marker=dict(size=data['Distance'],
     #                 color=[0, 1, 2, 3])
     # ))
-    sizeref = 2.*max(data['Distance'])/(100**2)
+    sizeref = 2.*max(dataMan['Distance'])/(100**2)
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=data['Time'], 
-        y=data['But'],
+        x=dataMan['Minute'], 
+        y=dataMan['Resultat'],
         name='Manchester City',
-        marker_size=data['Distance'],
+        marker_size=dataMan['Distance'],
         ))
     fig.add_trace(go.Scatter(
-        x=data['Time'], 
-        y=data['But'],
+        x=dataChe['Minute'], 
+        y=dataChe['Resultat'],
         name='Chelsea',
-        marker_size=data['Distance'],
+        marker_size=dataChe['Distance'],
         ))
     # Tune marker appearance and layout
     fig.update_traces(mode='markers', marker=dict(sizemode='area',
                                                 sizeref=sizeref, line_width=2))
-    #fig.update_layout(barmode='stack')
     
     return fig
 
-def goaler_viz(fig, data):
+def goaler_viz(fig, dataChel, dataMan):
     '''
         Ddrawraws the bar chart.
 
@@ -186,14 +185,24 @@ def goaler_viz(fig, data):
     '''
     # TODO : Update the figure's data according to the selected mode
 
+    shortPassChel = [dataChel['CourtReussis'][0], dataChel['CourtRate'][0]]
+    longPassChel = [dataChel['LongReussis'][0], dataChel['LongRate'][0]]
+    shortPassMan = [dataChel['CourtReussis'][0], dataChel['CourtRate'][0]]
+    longPassMan = [dataChel['LongReussis'][0], dataChel['LongRate'][0]]
     labels = ["Raté", "Réussi"]
 
     # Create subplots: use 'domain' type for Pie subplot
-    fig = make_subplots(rows=2, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
-    fig.add_trace(go.Pie(labels=labels, values=data['GoalerAShort'], name="GoalerAShort"),
+    fig = make_subplots(rows=2, cols=4,
+        specs=[[{"type": "domain"}, {"type": "domain"}, {"type": "domain"}, {"type": "domain"}],
+                [{'colspan': 2}, None, {'colspan': 2}, None]])
+    fig.add_trace(go.Pie(labels=labels, values=shortPassChel, name="GoalerAShort"),
                 1, 1)
-    fig.add_trace(go.Pie(labels=labels, values=data['GoalerALong'], name="GoalerALong"),
+    fig.add_trace(go.Pie(labels=labels, values=longPassChel, name="GoalerALong"),
                 1, 2)
+    fig.add_trace(go.Pie(labels=labels, values=shortPassMan, name="GoalerBShort"),
+                1, 3)
+    fig.add_trace(go.Pie(labels=labels, values=longPassMan, name="GoalerBLong"),
+                1, 4)
 
     # Use `hole` to create a donut-like pie chart
     fig.update_traces(hole=.4, hoverinfo="label+percent+name")
@@ -202,13 +211,13 @@ def goaler_viz(fig, data):
         title_text="Rendement des passes des gardiens",
         # Add annotations in the center of the donut pies.
         annotations=[dict(text='Court', x=0.18, y=0.5, font_size=20, showarrow=False),
-                    dict(text='Long', x=0.82, y=0.5, font_size=20, showarrow=False)])
+                    dict(text='Long', x=0.82, y=0.5, font_size=20, showarrow=False)]) 
     
 
     # Bars Section
     fig.add_trace(go.Bar(
         y=['GoalerA'],
-        x=data['GoalerAShortRatio'],
+        x=dataChel['TotalCourt'],
         name='Court',
         orientation='h',
         marker=dict(
@@ -217,8 +226,8 @@ def goaler_viz(fig, data):
         ),
     ), 2, 1)
     fig.add_trace(go.Bar(
-        y=['GoalerA', 'orangutans', 'monkeys'],
-        x=data['GoalerALongRatio'],
+        y=['GoalerA'],
+        x=dataChel['TotalLong'],
         name='Long',
         orientation='h',
         marker=dict(
@@ -226,6 +235,28 @@ def goaler_viz(fig, data):
             line=dict(color='rgba(58, 71, 80, 1.0)', width=3)
         )
     ), 2, 1)
+
+    # Bars Section
+    fig.add_trace(go.Bar(
+        y=['GoalerB'],
+        x=dataMan['TotalCourt'],
+        name='Court',
+        orientation='h',
+        marker=dict(
+            color='rgba(246, 78, 139, 0.6)',
+            line=dict(color='rgba(246, 78, 139, 1.0)', width=3)
+        ),
+    ), 2, 3)
+    fig.add_trace(go.Bar(
+        y=['GoalerB'],
+        x=dataMan['TotalLong'],
+        name='Long',
+        orientation='h',
+        marker=dict(
+            color='rgba(58, 71, 80, 0.6)',
+            line=dict(color='rgba(58, 71, 80, 1.0)', width=3)
+        )
+    ), 2, 3)
 
     fig.update_layout(barmode='stack')
     return fig

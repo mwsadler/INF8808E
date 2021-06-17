@@ -3,7 +3,7 @@
 
 '''
     File name: app.py
-    Author: Olivia Gélinas
+    Author: Félix Dumont, Augustin Bouchard, Mark Weber-Sadler
     Course: INF8808
     Python Version: 3.8
 
@@ -27,9 +27,9 @@ from modes import MODES
 
 app = dash.Dash(__name__)
 server = app.server
-app.title = 'TP2 | INF8808'
+app.title = 'ProjetFinal | INF8808'
 
-
+# Data pre-process
 def prep_data_poss():
     dfPossChel= pd.read_csv('./assets/data/PossessionChelsea.csv') #2 
     dfPossMan = pd.read_csv('./assets/data/PossessionManCity.csv') #2 
@@ -47,8 +47,8 @@ def prep_data_pass():
 def prep_data_shot():
     dfTirs = pd.read_csv('./assets/data/Tirs.csv')  #4
 
-    proc_data = preprocess.clean_shot(dfTirs)
-    return proc_data
+    proc_data_chel,  proc_data_man= preprocess.clean_shot(dfTirs)
+    return proc_data_chel, proc_data_man
 
 def prep_data_goaler():
     dfGardienChel = pd.read_csv('./assets/data/TypesDePasseChelsea.csv') #5
@@ -57,6 +57,7 @@ def prep_data_goaler():
     proc_data_man = preprocess.clean_goaler(dfGardienMan)
     proc_data_chel = preprocess.clean_goaler(dfGardienChel)
     return proc_data_chel, proc_data_man
+
 
 def prep_data_press():
     '''
@@ -72,8 +73,7 @@ def prep_data_press():
     proc_data_chel = preprocess.clean_pressure(dfDefChel)
     return proc_data_chel, proc_data_man
 
-
-def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPassMan, figure):
+def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPassMan, figShots, figGoalers):
     '''
         Generates the HTML layout representing the app.
 
@@ -181,7 +181,7 @@ def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPa
             ]),
             html.Div(className='viz-container', children=[
                 dcc.Graph(
-                    figure=figure,
+                    figure=figShots,
                     config=dict(
                         scrollZoom=False,
                         showTips=False,
@@ -199,7 +199,7 @@ def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPa
             ]),
             html.Div(className='viz-container', children=[
                 dcc.Graph(
-                    figure=figure,
+                    figure=figGoalers,
                     config=dict(
                         scrollZoom=False,
                         showTips=False,
@@ -213,23 +213,30 @@ def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPa
             ]),
         ]),
     ])
-    
 
-data_press_viz_chel, data_press_viz_man = prep_data_press()
-data_pass_viz_chel, data_pass_viz_man = prep_data_pass()
-data_poss_viz = prep_data_poss()
-data_shot_viz = prep_data_shot()
-data_goaler_viz = prep_data_goaler()
 create_template()
-
 fig = bar_chart.init_figure()
 
+#viz1: Pressions 
+data_press_viz_chel, data_press_viz_man = prep_data_press()
 figPressureChel = bar_chart.draw_pressure_viz(fig, data_press_viz_chel)
 figPressureMan = bar_chart.draw_pressure_viz(fig, data_press_viz_man)
 
+#viz2: Touches par zone
+data_poss_viz = prep_data_poss()
 figPoss = bar_chart.touches_viz(fig, data_poss_viz)
 
+#viz3: Rendement des passes
+data_pass_viz_chel, data_pass_viz_man = prep_data_pass()
 figPassChel = bar_chart.passes_viz(fig, data_pass_viz_chel)
 figPassMan = bar_chart.passes_viz(fig, data_pass_viz_man)
 
-app.layout = init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPassMan, figPressureMan)
+#viz4: Tirs au cours du match
+data_shot_viz_chel, data_shot_viz_man = prep_data_shot()
+figShots = bar_chart.shot_viz(fig, data_shot_viz_chel, data_shot_viz_man)
+
+#viz5: Rendement des passes des gardiens
+data_goaler_viz_chel, data_goaler_viz_man = prep_data_goaler()
+figGoalers = bar_chart.goaler_viz(fig, data_goaler_viz_chel, data_goaler_viz_man)
+
+app.layout = init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPassMan, figShots, figGoalers)
