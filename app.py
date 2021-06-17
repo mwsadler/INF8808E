@@ -26,6 +26,7 @@ from modes import MODES
 
 
 app = dash.Dash(__name__)
+server = app.server
 app.title = 'TP2 | INF8808'
 
 
