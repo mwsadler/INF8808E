@@ -177,19 +177,10 @@ def goaler_viz(dataChel, dataMan):
         Returns:
             fig: The figure including the drawn plot.
     '''
-<<<<<<< HEAD
     shortPassChel = [dataChel['CourtRate'][0], dataChel['CourtReussis'][0]]
     longPassChel = [dataChel['LongRate'][0], dataChel['LongReussis'][0]]
     shortPassMan = [dataMan['CourtRate'][0], dataMan['CourtReussis'][0]]
     longPassMan = [dataMan['LongRate'][0], dataMan['LongReussis'][0]]
-=======
-    # TODO : Update the figure's data according to the selected mode
-
-    shortPassChel = [dataChel['CourtReussis'][0], dataChel['CourtRate'][0]]
-    longPassChel = [dataChel['LongReussis'][0], dataChel['LongRate'][0]]
-    shortPassMan = [dataMan['CourtReussis'][0], dataMan['CourtRate'][0]]
-    longPassMan = [dataMan['LongReussis'][0], dataMan['LongRate'][0]]
->>>>>>> main
     labels = ["Raté", "Réussi"]
 
     fig = make_subplots(rows=2, cols=4,
@@ -206,12 +197,8 @@ def goaler_viz(dataChel, dataMan):
     fig.add_trace(go.Pie(labels=labels, values=longPassMan, name="Ederson Long"),
                 1, 4)
 
-<<<<<<< HEAD
-    fig.update_traces(hole=.5, hoverinfo="label+percent+name") # Hole for the donut chart
-=======
     # Use `hole` to create a donut-like pie chart
     fig.update_traces(hole=.8, hoverinfo="label+percent+name")
->>>>>>> main
 
     fig.update_layout(
         title_text="Rendement des passes des gardiens")
