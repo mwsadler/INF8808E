@@ -97,8 +97,10 @@ button:hover, button:active {
 .viz-info {
     display: flex;
     flex-direction: column;
+    font-size: large;
+    line-height: 1.8;
     padding: 0 100px;
-    padding-bottom: 20px;
+    padding-bottom: 60px;
 }
 
 #mode {

@@ -164,6 +164,7 @@ def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPa
                         Les visualisation ci-dessous sur le rendement des passes présente le ratio des passes réussies et des passes raté pour les 3 types de passes soit courte, moyenne et longue.
                         Pour chacune des équipe, il y a un graphique présentant le rendement despasses pour chacun de ces joueurs en ordre de ceux qui ont fait le plus de passe total.
                         Ces visualisations permettent de voir quels types de passe sont le plus réussis et raté pour prevoir le prochain entrainnement des équipes.
+                        La légende permet de retirer certaines données pour plus de lisibilité au besoin.
                         Nous pouvons aussi comparer le style de jeu des deux équipes.
                         Les joueurs de Manchester City ont effectué et réussis beaucoup plus de passe moyenne que Chelsea, donc on peut déterminer que Manchester City jouait un jeu moins compact que Chelsea et dominait plus la partie.
                         
@@ -196,7 +197,7 @@ def init_app_layout(figPressureChel, figPressureMan, figPoss, figPassChel, figPa
                     ),
                     className='graph',
                     id='v3-2'
-                )
+                ) 
             ]),
             html.Div(className='viz-info', children=[
                 html.H1('Visualisation 4: Tirs au cours du match'),

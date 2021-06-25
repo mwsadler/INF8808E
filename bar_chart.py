@@ -60,30 +60,11 @@ def touches_viz(data):
         '#6CADDF', # Light blue
         '#034694' # Dark blue
     ]
-    
-    fig = make_subplots(rows=1, cols=2, specs=[[{}, {}]], shared_xaxes=True,
-                    shared_yaxes=True, vertical_spacing=0.001)
 
-    fig.append_trace(
-        go.Bar(name='Manchester City', x=-data['Man city'], y=data['Zone'], marker_color=colors[0], orientation='h',), 1, 1
-    )
-    fig.append_trace(
-        go.Bar(name='Chelsea', x=data['Chelsea'], y=data['Zone'], marker_color=colors[1], orientation='h',), 1, 1
-    )
-
-    fig.append_trace(go.Scatter(
-        x=data['differentiel'], y=data['Zone'],
-        mode='lines+markers',
-        line_color='rgb(128, 0, 128)',
-        name='Différentiel de possession',
-    ), 1, 2)
-
-    fig.append_trace(go.Scatter(
-        x=[0,0,0], y=data['Zone'],
-        mode='lines',
-        line_color='rgb(0, 0, 0)',
-        name='Centre',
-    ), 1, 2)
+    fig = go.Figure(data=[
+        go.Bar(name='Manchester City', x=-data['Man city'], y=data['Zone'], marker_color=colors[0], orientation='h',),
+        go.Bar(name='Chelsea', x=data['Chelsea'], y=data['Zone'], marker_color=colors[1], orientation='h',),
+    ])
 
     fig.update_layout(barmode='relative' )
     fig.update_xaxes(title_text = "Nombre de touches")
@@ -177,6 +158,11 @@ def goaler_viz(dataChel, dataMan):
         Returns:
             fig: The figure including the drawn plot.
     '''
+    pieColors = [
+        '#E20000', # Red
+        '#51E900' # Green
+    ]
+
     shortPassChel = [dataChel['CourtRate'][0], dataChel['CourtReussis'][0]]
     longPassChel = [dataChel['LongRate'][0], dataChel['LongReussis'][0]]
     shortPassMan = [dataMan['CourtRate'][0], dataMan['CourtReussis'][0]]
@@ -188,13 +174,13 @@ def goaler_viz(dataChel, dataMan):
                 [{'colspan': 2}, None, {'colspan': 2}, None]])
 
     # Donuts Section
-    fig.add_trace(go.Pie(labels=labels, values=shortPassChel, name="Edouard Mendy Court"),
+    fig.add_trace(go.Pie(labels=labels, values=shortPassChel, name="Edouard Mendy Court", marker_colors=pieColors),
                 1, 1)
-    fig.add_trace(go.Pie(labels=labels, values=longPassChel, name="Edouard Mendy Long"),
+    fig.add_trace(go.Pie(labels=labels, values=longPassChel, name="Edouard Mendy Long", marker_colors=pieColors),
                 1, 2)
-    fig.add_trace(go.Pie(labels=labels, values=shortPassMan, name="Ederson Court"),
+    fig.add_trace(go.Pie(labels=labels, values=shortPassMan, name="Ederson Court", marker_colors=pieColors),
                 1, 3)
-    fig.add_trace(go.Pie(labels=labels, values=longPassMan, name="Ederson Long"),
+    fig.add_trace(go.Pie(labels=labels, values=longPassMan, name="Ederson Long", marker_colors=pieColors),
                 1, 4)
 
     fig.update_traces(hole=.5, hoverinfo="label+percent+name") # Hole for the donut chart

@@ -39,9 +39,6 @@ def clean_poss(my_df1, my_df2):
     my_df2[['ZoneDefensive', 'ZoneMilieu', 'ZoneAttaque']] = my_df2[['ZoneDefensive', 'ZoneMilieu', 'ZoneAttaque']].apply(pd.to_numeric)  
     d = {'Zone': ['Zone défensive', 'Zone centrale', 'Zone offensive'] ,'Chelsea': [my_df1["ZoneDefensive"].sum(), my_df1["ZoneMilieu"].sum(), my_df1["ZoneAttaque"].sum()], 'Man city': [my_df2["ZoneDefensive"].sum(), my_df2["ZoneMilieu"].sum(), my_df2["ZoneAttaque"].sum()]}
     df = pd.DataFrame(data=d)
-
-    df[['Man city', 'Chelsea']] = df[['Man city', 'Chelsea']].apply(pd.to_numeric)
-    df['differentiel'] = df.apply(lambda x: x['Chelsea'] - x['Man city'], axis=1)
     return df
 
 def clean_shot(my_df):
