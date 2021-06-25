@@ -183,7 +183,8 @@ def goaler_viz(dataChel, dataMan):
     fig.add_trace(go.Pie(labels=labels, values=longPassMan, name="Ederson Long", marker_colors=pieColors),
                 1, 4)
 
-    fig.update_traces(hole=.5, hoverinfo="label+percent+name") # Hole for the donut chart
+    # Use `hole` to create a donut-like pie chart
+    fig.update_traces(hole=.8, hoverinfo="label+percent+name")
 
     fig.update_layout(
         title_text="Rendement des passes des gardiens")
